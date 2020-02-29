@@ -16,6 +16,8 @@ echo "${answerSpotify}"
 #Install and configure VIM
 apt -y install vim
 cp .vimrc /home/${USER}/
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 #Install and configure Spotify if you have a HiDPi
 curl -sS https://download.spotify.com/debian/pubkey.gpg | sudo apt-key add - 
