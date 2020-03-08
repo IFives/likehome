@@ -1,6 +1,11 @@
-!/bin/bash
+#!/bin/bash
+#######################################################################
+#Author : IFives
+#Date of creation : 01/03/2020
+#Last modification date : 08/03/2020
+#######################################################################
 
-exec 1 && exec 2 > /var/log/likehome.log
+exec 1 && 2 > /var/log/likehome.log
 
 echo "Welcome to your new Debian/Ubuntu based OS !"
 
@@ -54,13 +59,25 @@ apt -y install snapd
 #Wait 1 second, there can be some errors if you install snap packages directly after installing another package
 sleep 1000
 
+#Install Discordvia snapcraft
 snap install discord
+
+#Install molotov TV
+wget 'https://www.molotov.tv/download' -O molotov.Appimage
+chmod +x molotov.Appimage
 
 #Check if there some old packages that needs to be revomed
 apt -y autoremove
 
 #Checking if there are errors
-echo "Oh Oh... There are some errors :"
-cat /var/log/likehome.log | grep err
+testerr=cat /var/log/likehome.log | grep err
+if [ ! -z ${testerr}  ]
+then
+	echo "Oh Oh... There are some errors :"
+	echo ${testerr}
+else
+	echo "No errors, everything's fine !"
+fi
 
+#End of script
 echo "The personalisation is finished, go see the result by yourself !"
