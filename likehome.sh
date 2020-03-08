@@ -5,10 +5,24 @@
 #Last modification date : 08/03/2020
 #######################################################################
 
-exec 1 && 2 > /var/log/likehome.log
+#Put everything done by the script (tee command) and at the same time put it in the terminal, so it can be read by the user
+exec 2>&1 | tee /var/log/likehome.log
+
+dateHour=$(date +%d-%m-%Y %H:%M)
+
+#Put date and hour at the beginning of the log file
+echo ${dateHour}
 
 echo "Welcome to your new Debian/Ubuntu based OS !"
 
+#Add repo to install papirus icons pack
+add-apt-repository ppa:papirus/papirus
+
+#Add repo to install spotify
+curl -sS https://download.spotify.com/debian/pubkey.gpg | apt-key add - 
+echo "deb http://repository.spotify.com stable non-free" | tee /etc/apt/sources.list.d/spotify.list
+
+#Update the package from the repos and uprade packages of the computer
 apt update
 apt -y upgrade
 
@@ -21,8 +35,11 @@ apt -y upgrade
 #read answerGnome
 #echo "${answerGnome}"
 
-echo "What's your home folder's name ? (Ex: /home/username)"
+echo "What's your home folder's name ? (Ex: /home/username; Username in lower case)"
 read usrName
+
+#Install Graphical for Uncomplicated Firewall
+apt -y install gufw
 
 #Install and configure VIM
 apt -y install vim
@@ -31,12 +48,10 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 #Install and configure Spotify if you have a HiDPi
-curl -sS https://download.spotify.com/debian/pubkey.gpg | apt-key add - 
-echo "deb http://repository.spotify.com stable non-free" | tee /etc/apt/sources.list.d/spotify.list
 apt -y install spotify-client
 #if [ ${answerSpotify} = "yes" ] 
 #then
-        sudo cp spotify.desktop /usr/share/applications/
+#        sudo cp spotify.desktop /usr/share/applications/
 #fi
 
 sudo apt -y install chromium
@@ -47,7 +62,6 @@ apt -y install gnome-shell-extensions
 apt -y install chrome-gnome-shell
 
 #Install the papirus icons pack
-add-apt-repository ppa:papirus/papirus
 apt -y install papirus-icon-theme
 
 #Install the mail client thunderbird
