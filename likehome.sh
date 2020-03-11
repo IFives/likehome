@@ -2,11 +2,8 @@
 #######################################################################
 #Author : IFives
 #Date of creation : 01/03/2020
-#Last modification date : 09/03/2020
+#Last modification date : 11/03/2020
 #######################################################################
-
-#Put everything done by the script (tee command) and at the same time put it in the terminal, so it can be read by the user
-exec 2>&1 | tee /var/log/likehome.log
 
 #Variables to color the text
 RED='\033[0;31m'
@@ -20,7 +17,14 @@ YELLOW='\033[1;33m'
 #No color
 NC='\033[0m'
 
+#Variable for the log file
+logfile=/var/log/likehome.log
+
+#Variable for the time
 dateHour=$(date +%d-%m-%Y %H:%M)
+
+#Log errors
+exec 2> ${logfile}
 
 #Put date and hour at the beginning of the log file
 echo ${dateHour}
@@ -73,9 +77,6 @@ apt -y install gnome-tweak-tool
 apt -y install gnome-shell-extensions
 apt -y install chrome-gnome-shell
 
-echo -e "${CYAN} Installing the papirus icons pack ${NC}"
-apt -y install papirus-icon-theme
-
 echo -e "${CYAN} Installing the mail client thunderbird ${CN}"
 apt -y install thunderbird
 
@@ -95,14 +96,27 @@ chmod +x molotov.Appimage
 echo -e "${CYAN} Check if there some old packages that needs to be revomed ${CN}"
 apt -y autoremove
 
+#Personalisation of the icons and the theme Sweat-mars
+
+#That's the folders where your icons pack and theme will be stored
+mkdir /home/${username}/.themes
+mkdir /home/${username}/.icons
+
+echo -e "${CYAN} Installing the papirus icons pack ${NC}"
+apt -y install papirus-icon-theme
+
+echo -e "${CYAN} Downloading and puting the theme in the right folder ${NC}"
+#wget ...
+#tar xzJf
+#cp
+
 echo -e "${CYAN} Checking if there are errors ${CN}"
-testerr=cat /var/log/likehome.log | grep err
-if [ ! -z ${testerr}  ]
+if [ -s ${logfile}  ]
 then
-	echo "Oh Oh... There are some errors :"
-	echo ${testerr}
+	echo "${RED} Oh Oh... There are some errors : ${NC}"
+	echo ${logfile}
 else
-	echo "No errors, everything's fine !"
+	echo "${GREEN} No errors, everything's fine ! ${NC}"
 fi
 
 #End of script
