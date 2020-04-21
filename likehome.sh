@@ -89,10 +89,6 @@ sleep 1
 echo -e "${CYAN} Installing Discord via snapcraft ${CN}"
 snap install discord
 
-echo -e "${CYAN} Installing molotov TV ${CN}"
-wget 'https://www.molotov.tv/download' -O molotov.Appimage
-chmod +x molotov.Appimage
-
 echo -e "${CYAN} Check if there some old packages that needs to be revomed ${CN}"
 apt -y autoremove
 
